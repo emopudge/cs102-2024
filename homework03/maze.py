@@ -10,7 +10,8 @@ def create_grid(rows: int = 15, cols: int = 15) -> List[List[Union[str, int]]]:
 
 
 def remove_wall(
-    grid: List[List[Union[str, int]]], coord: Tuple[int, int]) -> List[List[Union[str, int]]]:
+    grid: List[List[Union[str, int]]], coord: Tuple[int, int]
+) -> List[List[Union[str, int]]]:
     """
 
     :param grid:
@@ -24,7 +25,7 @@ def remove_wall(
         for j in range(len(grid[i])):
             if i == coord[0] and j == coord[1]:
                 if (i % 2 == 1) and (j % 2 == 1):
-                    ar.append('')
+                    ar.append("")
                 else:
                     ar.append(grid[i][j])
             else:
@@ -51,16 +52,16 @@ def rand_enter(grid):
     r = randint(1, 4)
     if r == 1:
         k = randint(1, len(grid) - 2)
-        grid[0][k] = 'X'
+        grid[0][k] = "X"
     elif r == 2:
         k = randint(1, len(grid) - 2)
-        grid[len(grid) - 1][k] = 'X'
+        grid[len(grid) - 1][k] = "X"
     elif r == 3:
         k = randint(1, len(grid) - 2)
-        grid[k][0] = 'X'
+        grid[k][0] = "X"
     elif r == 4:
         k = randint(1, len(grid) - 2)
-        grid[k][len(grid) - 1] = 'X'
+        grid[k][len(grid) - 1] = "X"
     return grid
 
 
@@ -81,7 +82,6 @@ def bin_tree_maze(
 
     grid = rand_enter_double(remove_wall_pretty(create_grid(rows, cols)))
 
-
     # 1. выбрать любую клетку
     # 2. выбрать направление: наверх или направо.
     # Если в выбранном направлении следующая клетка лежит за границами поля,
@@ -93,25 +93,25 @@ def bin_tree_maze(
     if random_exit:
         for coord in get_exits(grid):
             if coord[0] == 0:
-                grid[1][coord[1]] = ''
+                grid[1][coord[1]] = ""
             elif coord[0] == len(grid) - 1:
-                grid[len(grid) - 2][coord[1]] = ''
+                grid[len(grid) - 2][coord[1]] = ""
             elif coord[1] == 0:
-                grid[coord[0]][1] = ''
+                grid[coord[0]][1] = ""
             elif coord[1] == len(grid) - 1:
-                grid[coord[0]][len(grid) - 2] = ''
+                grid[coord[0]][len(grid) - 2] = ""
             for i, row in enumerate(grid):
                 for j, value in enumerate(row):
-                    if value == '':
-                        direction = choice(['up', 'right'])
-                        if direction == 'up':
+                    if value == "":
+                        direction = choice(["up", "right"])
+                        if direction == "up":
                             if grid[i - 1][j] and i - 1 > 0:
-                                grid[i - 1][j] = ''
+                                grid[i - 1][j] = ""
                             else:
-                                direction = 'right'
+                                direction = "right"
                         else:
                             if grid[i][j + 1] and j + 1 < len(grid) - 1:
-                                grid[i][j + 1] = ''
+                                grid[i][j + 1] = ""
     else:
         pass
     return grid
@@ -123,9 +123,13 @@ def get_exits(grid: List[List[Union[str, int]]]) -> List[Tuple[int, int]]:
     :param grid:
     :return:
     """
-    exits = [(i, j) for i, row in enumerate(grid) for j, cell in enumerate(row) if cell == 'X']
+    exits = [
+        (i, j)
+        for i, row in enumerate(grid)
+        for j, cell in enumerate(row)
+        if cell == "X"
+    ]
     return exits
-
 
 
 def make_step(grid: List[List[Union[str, int]]], k: int) -> List[List[Union[str, int]]]:
@@ -144,7 +148,11 @@ def make_step(grid: List[List[Union[str, int]]], k: int) -> List[List[Union[str,
             if val == k:
                 for deltarow, deltacol in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
                     newrow, newcol = r + deltarow, c + deltacol
-                    if 0 <= newrow < rows and 0 <= newcol < cols and grid[newrow][newcol] == 0:
+                    if (
+                        0 <= newrow < rows
+                        and 0 <= newcol < cols
+                        and grid[newrow][newcol] == 0
+                    ):
                         grid[newrow][newcol] = k + 1
 
     return grid
@@ -202,10 +210,10 @@ def encircled_exit(grid: List[List[Union[str, int]]], coord: Tuple[int, int]) ->
         return False
 
     if (
-            grid[x - 1][y] == "■" and
-            grid[x + 1][y] == "■" and
-            grid[x][y - 1] == "■" and
-            grid[x][y + 1] == "■"
+        grid[x - 1][y] == "■"
+        and grid[x + 1][y] == "■"
+        and grid[x][y - 1] == "■"
+        and grid[x][y + 1] == "■"
     ):
         return True
     else:
@@ -214,7 +222,9 @@ def encircled_exit(grid: List[List[Union[str, int]]], coord: Tuple[int, int]) ->
 
 def solve_maze(
     grid: List[List[Union[str, int]]],
-) -> Tuple[List[List[Union[str, int]]], Optional[Union[Tuple[int, int], List[Tuple[int, int]]]]]:
+) -> Tuple[
+    List[List[Union[str, int]]], Optional[Union[Tuple[int, int], List[Tuple[int, int]]]]
+]:
     """
 
     :param grid:
@@ -240,7 +250,8 @@ def solve_maze(
 
 
 def add_path_to_grid(
-    grid: List[List[Union[str, int]]], path: Optional[Union[Tuple[int, int], List[Tuple[int, int]]]]
+    grid: List[List[Union[str, int]]],
+    path: Optional[Union[Tuple[int, int], List[Tuple[int, int]]]],
 ) -> List[List[Union[str, int]]]:
     """
 
@@ -264,5 +275,3 @@ if __name__ == "__main__":
     _, PATH = solve_maze(GRID)
     MAZE = add_path_to_grid(GRID, PATH)
     print(pd.DataFrame(MAZE))
-
-
