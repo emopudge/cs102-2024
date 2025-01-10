@@ -9,9 +9,7 @@ def create_grid(rows: int = 15, cols: int = 15) -> List[List[Union[str, int]]]:
     return [["■"] * cols for _ in range(rows)]
 
 
-def remove_wall(
-    grid: List[List[Union[str, int]]], coord: Tuple[int, int]
-) -> List[List[Union[str, int]]]:
+def remove_wall(grid: List[List[Union[str, int]]], coord: Tuple[int, int]) -> List[List[Union[str, int]]]:
     """
 
     :param grid:
@@ -69,9 +67,7 @@ def rand_enter_double(grid):
     return rand_enter(rand_enter(grid))
 
 
-def bin_tree_maze(
-    rows: int = 15, cols: int = 15, random_exit: bool = True
-) -> List[List[Union[str, int]]]:
+def bin_tree_maze(rows: int = 15, cols: int = 15, random_exit: bool = True) -> List[List[Union[str, int]]]:
     """
 
     :param rows:
@@ -123,12 +119,7 @@ def get_exits(grid: List[List[Union[str, int]]]) -> List[Tuple[int, int]]:
     :param grid:
     :return:
     """
-    exits = [
-        (i, j)
-        for i, row in enumerate(grid)
-        for j, cell in enumerate(row)
-        if cell == "X"
-    ]
+    exits = [(i, j) for i, row in enumerate(grid) for j, cell in enumerate(row) if cell == "X"]
     return exits
 
 
@@ -148,11 +139,7 @@ def make_step(grid: List[List[Union[str, int]]], k: int) -> List[List[Union[str,
             if val == k:
                 for deltarow, deltacol in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
                     newrow, newcol = r + deltarow, c + deltacol
-                    if (
-                        0 <= newrow < rows
-                        and 0 <= newcol < cols
-                        and grid[newrow][newcol] == 0
-                    ):
+                    if 0 <= newrow < rows and 0 <= newcol < cols and grid[newrow][newcol] == 0:
                         grid[newrow][newcol] = k + 1
 
     return grid
@@ -209,12 +196,7 @@ def encircled_exit(grid: List[List[Union[str, int]]], coord: Tuple[int, int]) ->
     if x == 0 or x == rows - 1 or y == 0 or y == cols - 1:
         return False
 
-    if (
-        grid[x - 1][y] == "■"
-        and grid[x + 1][y] == "■"
-        and grid[x][y - 1] == "■"
-        and grid[x][y + 1] == "■"
-    ):
+    if grid[x - 1][y] == "■" and grid[x + 1][y] == "■" and grid[x][y - 1] == "■" and grid[x][y + 1] == "■":
         return True
     else:
         return False
@@ -222,9 +204,7 @@ def encircled_exit(grid: List[List[Union[str, int]]], coord: Tuple[int, int]) ->
 
 def solve_maze(
     grid: List[List[Union[str, int]]],
-) -> Tuple[
-    List[List[Union[str, int]]], Optional[Union[Tuple[int, int], List[Tuple[int, int]]]]
-]:
+) -> Tuple[List[List[Union[str, int]]], Optional[Union[Tuple[int, int], List[Tuple[int, int]]]]]:
     """
 
     :param grid:
