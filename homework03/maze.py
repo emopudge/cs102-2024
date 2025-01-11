@@ -150,19 +150,18 @@ def shortest_path(
     x_out, y_out = exit_coord
 
     try:
-        while grid[x_out][y_out] == 0 or isinstance(grid[x_out][y_out], str):  # check for strings as well
-            return None  # No path found if it's not an integer or is 0 at the exit.
+        while grid[x_out][y_out] == 0 or isinstance(grid[x_out][y_out], str):  
+            return None 
 
     except IndexError:
-        return None  # Handle cases where exit_coord is out of bounds
+        return None  
 
     path = [exit_coord]
     x, y = exit_coord
     try:
-        k = int(grid[x][y])  # Convert to int explicitly - handle potential ValueError
+        k = int(grid[x][y])  
     except (ValueError, IndexError):
-        return None  # Handle cases where the exit is not an integer or if coord is out of bounds
-
+        return None  
     while k > 1:
         found_next = False
         for dx, dy in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
@@ -180,10 +179,10 @@ def shortest_path(
                     found_next = True
                     break
             except IndexError:
-                pass  # Ignore index errors gracefully
+                pass  
 
         if not found_next:
-            return None  # No path found
+            return None  # путь не найден
 
     return path[::-1]
 
