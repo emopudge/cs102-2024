@@ -10,27 +10,19 @@ def create_grid(rows: int = 15, cols: int = 15) -> List[List[Union[str, int]]]:
 
 
 def remove_wall(grid: List[List[Union[str, int]]], coord: Tuple[int, int]) -> List[List[Union[str, int]]]:
-    """
+    """Removes a wall from a grid at the specified coordinates.  Assumes integers are walls."""
+    rows = len(grid)
+    cols = len(grid[0]) if rows > 0 else 0
 
-    :param grid:
-    :param coord:
-    :return:
-    """
+    if not (0 <= coord[0] < rows and 0 <= coord[1] < cols):
+        return grid
 
-    new = []
-    for i in range(len(grid)):
-        ar = []
-        for j in range(len(grid[i])):
-            if i == coord[0] and j == coord[1]:
-                if (i % 2 == 1) and (j % 2 == 1):
-                    ar.append("")
-                else:
-                    ar.append(grid[i][j])
-            else:
-                ar.append(grid[i][j])
-        new.append(ar)
-    grid = new
-    return grid
+    new_grid = [row[:] for row in grid]  # Deep copy
+
+    if (coord[0] % 2 == 1) and (coord[1] % 2 == 1):
+        new_grid[coord[0]][coord[1]] = ""  # Replace with empty string regardless of original type
+
+    return new_grid
 
 
 def remove_wall_pretty(mas):
@@ -148,37 +140,47 @@ def make_step(grid: List[List[Union[str, int]]], k: int) -> List[List[Union[str,
 def shortest_path(
     grid: List[List[Union[str, int]]], exit_coord: Tuple[int, int]
 ) -> Optional[Union[Tuple[int, int], List[Tuple[int, int]]]]:
-    """
+    """ищем кратчайшее расстояние от входа до выхода."""
 
-    :param grid:
-    :param exit_coord:
-    :return:
-    """
-    k = 0
     x_out, y_out = exit_coord
 
-    while grid[x_out][y_out] == 0:
-        k += 1
-        grid = make_step(grid, k)
+    try:
+        while grid[x_out][y_out] == 0 or isinstance(grid[x_out][y_out], str):  # check for strings as well
+            return None  # No path found if it's not an integer or is 0 at the exit.
+
+    except IndexError:
+        return None  # Handle cases where exit_coord is out of bounds
 
     path = [exit_coord]
     x, y = exit_coord
-    k = grid[x][y]
+    try:
+        k = int(grid[x][y])  # Convert to int explicitly - handle potential ValueError
+    except (ValueError, IndexError):
+        return None  # Handle cases where the exit is not an integer or if coord is out of bounds
 
     while k > 1:
         found_next = False
         for dx, dy in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
             nx, ny = x + dx, y + dy
-            if 0 <= nx < len(grid) and 0 <= ny < len(grid[0]) and grid[nx][ny] == k - 1:
-                x, y = nx, ny
-                path.append((x, y))
-                k -= 1
-                found_next = True
-                break
-        if not found_next:  # Обработка случая, когда путь прерван
-            break
+            try:
+                if (
+                    0 <= nx < len(grid)
+                    and 0 <= ny < len(grid[0])
+                    and isinstance(grid[nx][ny], int)
+                    and grid[nx][ny] == k - 1
+                ):
+                    x, y = nx, ny
+                    path.append((x, y))
+                    k -= 1
+                    found_next = True
+                    break
+            except IndexError:
+                pass  # Ignore index errors gracefully
 
-    return path[::-1]  # Переворачиваем путь, т.к. он строится в обратном порядке
+        if not found_next:
+            return None  # No path found
+
+    return path[::-1]
 
 
 def encircled_exit(grid: List[List[Union[str, int]]], coord: Tuple[int, int]) -> bool:
