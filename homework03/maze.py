@@ -166,33 +166,35 @@ def encircled_exit(grid: List[List[Union[str, int]]], coord: Tuple[int, int]) ->
 
 
 def solve_maze(
-    grid: List[List[Union[str, int]]],
+        grid: List[List[Union[str, int]]],
 ) -> Tuple[List[List[Union[str, int]]], Optional[Union[Tuple[int, int], List[Tuple[int, int]]]]]:
     """
-
-    :param grid:
-    :return:
+    решает лабиринт, представленный в виде сетки
     """
+    entry_and_exit = get_exits(grid)
 
-    exits = get_exits(grid)
-    if len(exits) == 1:
-        return grid, exits
-    if len(exits) > 1:
-        if encircled_exit(grid, exits[0]) or encircled_exit(grid, exits[1]):
-            return grid, None
-        new_grid = deepcopy(grid)
-        x_in, y_in = exits[0]
-        grid[x_in][y_in] = 1
-        for x, row in enumerate(grid):
-            for y, _ in enumerate(row):
-                if grid[x][y] == " " or grid[x][y] == "X":
-                    grid[x][y] = 0
-        path = shortest_path(grid, exits[1])
-        return new_grid, path
+    if len(entry_and_exit) == 1:
+        return grid, entry_and_exit[0]
 
-    path = exits
+    start_point, end_point = entry_and_exit[0], entry_and_exit[1]
 
-    return grid, path
+    if encircled_exit(grid, start_point) or encircled_exit(grid, end_point):
+        return grid, None
+
+    grid[start_point[0]][start_point[1]] = 1
+    for row_index, row in enumerate(grid):
+        for col_index, cell in enumerate(row):
+            if cell in {" ", "X"}:
+                grid[row_index][col_index] = 0
+
+    current_step = 0
+    while grid[end_point[0]][end_point[1]] == 0:
+        current_step += 1
+        make_step(grid, current_step)
+
+    solution_path = shortest_path(grid, end_point)
+
+    return grid, solution_path
 
 
 def add_path_to_grid(
