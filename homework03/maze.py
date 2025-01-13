@@ -116,7 +116,11 @@ def shortest_path(
     """
     """ищем кратчайшее расстояние от входа до выхода."""
 
-    selected_coord, k, len_of_path = exit_coord, grid[exit_coord[0]][exit_coord[1]], grid[exit_coord[0]][exit_coord[1]]
+    selected_coord, k, len_of_path = (
+        exit_coord,
+        grid[exit_coord[0]][exit_coord[1]],
+        grid[exit_coord[0]][exit_coord[1]],
+    )
     coords = [(x, y) for x, row in enumerate(grid) for y, _ in enumerate(row)]
     path = [selected_coord]
 
@@ -166,7 +170,7 @@ def encircled_exit(grid: List[List[Union[str, int]]], coord: Tuple[int, int]) ->
 
 
 def solve_maze(
-        grid: List[List[Union[str, int]]],
+    grid: List[List[Union[str, int]]],
 ) -> Tuple[List[List[Union[str, int]]], Optional[Union[Tuple[int, int], List[Tuple[int, int]]]]]:
     """
     решает лабиринт, представленный в виде сетки
