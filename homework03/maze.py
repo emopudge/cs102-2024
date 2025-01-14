@@ -29,26 +29,6 @@ def remove_wall(grid: List[List[Union[str, int]]], coord: Tuple[int, int]) -> Li
     return grid
 
 
-def rand_enter(grid):
-    """
-    выбираем рандомные координаты для входа и выхода
-    """
-    r = randint(1, 4)
-    if r == 1:
-        k = randint(1, len(grid) - 2)
-        grid[0][k] = "X"
-    elif r == 2:
-        k = randint(1, len(grid) - 2)
-        grid[len(grid) - 1][k] = "X"
-    elif r == 3:
-        k = randint(1, len(grid) - 2)
-        grid[k][0] = "X"
-    elif r == 4:
-        k = randint(1, len(grid) - 2)
-        grid[k][len(grid) - 1] = "X"
-    return grid
-
-
 def bin_tree_maze(rows: int = 15, cols: int = 15, random_exit: bool = True) -> List[List[Union[str, int]]]:
     """генерирует лабиринт с помощью алгоритма случайного удаления стен"""
     grid = create_grid(rows, cols)
@@ -188,7 +168,7 @@ def solve_maze(
     grid[start_point[0]][start_point[1]] = 1
     for row_index, row in enumerate(grid):
         for col_index, cell in enumerate(row):
-            if cell in {" ", "X"}:
+            if cell in [" ", "X"]:
                 grid[row_index][col_index] = 0
 
     current_step = 0
