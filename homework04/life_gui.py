@@ -1,7 +1,3 @@
-"""
-создаем графический интерфейс игры в жизнь
-"""
-
 import pygame
 from pygame.locals import *
 
